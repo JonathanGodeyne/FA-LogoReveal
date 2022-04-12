@@ -11,10 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace Febelfin_academy_Logo_reveal
-{
-    /// <summary>
-    /// Interaction logic for ButtonWindow.xaml
-    /// </summary>
+{    
     public partial class ButtonWindow : Window
     {
         private MainWindow _main;
@@ -23,7 +20,6 @@ namespace Febelfin_academy_Logo_reveal
             InitializeComponent();
             _main = main;
         }
-
         private void button_Click(object sender, RoutedEventArgs e)
         {
            var buttonClicked = (Button)sender;

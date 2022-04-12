@@ -12,16 +12,5 @@ namespace Febelfin_academy_Logo_reveal
         public static SolidColorBrush Yellow  => (SolidColorBrush)new BrushConverter().ConvertFrom("#e6af00");
         public static SolidColorBrush Blue  => (SolidColorBrush)new BrushConverter().ConvertFrom("#70b8ed");
         public static SolidColorBrush Pink  => (SolidColorBrush)new BrushConverter().ConvertFrom("#fdc6d6");
-
-
-
-    
-
-
-
-
-
-
-
     }
 }
