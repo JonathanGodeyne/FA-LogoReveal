@@ -8,4 +8,14 @@
 		<UseWindowsForms>true</UseWindowsForms>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <None Remove="Resources\FA_Logo.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Resources\FA_Logo.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
 </Project>

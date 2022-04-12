@@ -19,7 +19,8 @@ namespace Febelfin_academy_Logo_reveal
     public partial class MainWindow : Window
     {
         public int AmountOf { get; set; } = 14;
-        public List<Coördinate> coördinates { get; set; } = new List<Coördinate>();
+        private List<Rectangle> _rects;
+       // public List<Coördinate> coördinates { get; set; } = new List<Coördinate>();
 
         public MainWindow()
         {
@@ -37,36 +38,61 @@ namespace Febelfin_academy_Logo_reveal
                 canvasImage.RowDefinitions.Add(row);
                 canvasImage.ColumnDefinitions.Add(column);
             }
+        }
 
+        public void AddLogo()
+        {
             var image = new Image();
-            image.Source = new BitmapImage(new Uri("../Resources/FA_Logo.png"));
+            image.Source = new BitmapImage(new Uri(@"Resources\FA_Logo.png", UriKind.Relative));
+            image.Stretch = Stretch.Uniform;
+            image.Opacity = 0.8;
+
             Grid.SetColumnSpan(image, AmountOf);
             Grid.SetRowSpan(image, AmountOf);
-            image.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-            image.VerticalAlignment = VerticalAlignment.Center;
-            
-            canvasImage.Children.Add(image);                 
+
+            canvasImage.Children.Add(image);
         }
+
+        //public void FillSquare(Brush color)
+        //{
+        //    Random rnd = new Random();
+        //    var position = rnd.Next(coördinates.Count);
+        //    var coord = coördinates[position];
+        //    if (coord != null)
+        //    {
+        //        int row = coord.Row;
+        //        int column = coord.Column;
+        //        coördinates.Remove(coord);
+
+        //        Rectangle square = new Rectangle();
+        //        Grid.SetColumn(square, column);
+        //        Grid.SetRow(square, row);
+        //        square.Fill = color;
+        //        canvasImage.Children.Add(square);                
+        //    }
+        //    //TODO
+        //    //Savestate
+        //}
 
         public void FillSquare(Brush color)
         {
-            Random rnd = new Random();
-            var position = rnd.Next(coördinates.Count);
-            var coord = coördinates[position];
-            if (coord != null)
-            {
-                int row = coord.Row;
-                int column = coord.Column;
-                coördinates.Remove(coord);
+           
+            Random random = new Random();
+            var square = _rects[random.Next(_rects.Count)];
+            square.Fill = color;
+            _rects.Remove(square);
+            State.Save(canvasImage.Children.OfType<Rectangle>().ToList());
 
-                Rectangle square = new Rectangle();
-                Grid.SetColumn(square, column);
-                Grid.SetRow(square, row);
-                square.Fill = color;
-                canvasImage.Children.Add(square);                
+        }
+
+        public void RestoreSquares()
+        {
+            var cords = State.Load();
+            foreach (var c in cords)
+            {
+                canvasImage.Children.Add(c);
             }
-            //TODO
-            //Savestate
+            
         }
 
         public void AddSquares()
@@ -79,18 +105,25 @@ namespace Febelfin_academy_Logo_reveal
 
                     Grid.SetColumn(square, j);
                     Grid.SetRow(square, i);
-                    square.Fill = new SolidColorBrush(Colors.White);
+                    
                     square.Width = 20;
                     square.Height = 20;
 
                     canvasImage.Children.Add(square);
-                    coördinates.Add(new Coördinate { Column = i, Row = j });
+                    //coördinates.Add(new Coördinate { Column = i, Row = j });
                 }
+               
             }
+           
+
         }
 
         public void RevealAll()
         {
+            for (int i = 0; i < _rects.Count; i++)
+            {
+                FillSquare(Brushes.BlueViolet);
+            }
 
         }
 
@@ -114,15 +147,39 @@ namespace Febelfin_academy_Logo_reveal
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
-        {            
+        {
             CreateCanvas();
-            AddSquares();
-            //TODO
-            //GetSavestate
+            
+
+            if (State.Exists())
+            {
+                MessageBoxResult result = System.Windows.MessageBox.Show("Vorige sessie onderbroken, doorgaan?", "Welkom", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                if (result == MessageBoxResult.Yes)
+                {
+                    RestoreSquares();
+
+
+
+                }
+                else
+                {
+                    AddSquares();
+                }
+
+
+
+            }
+
+            AddLogo();
+            
+            _rects = this.canvasImage.Children.OfType<Rectangle>().Where(x => x.Fill == null).ToList();
             var buttonWindow = new ButtonWindow(this);
             buttonWindow.Show();
             MaximizeToSecondaryMonitor();
+           
         }
+
+
 
     }
 }
