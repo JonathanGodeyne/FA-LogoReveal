@@ -9,7 +9,19 @@
         WindowState="Normal"
         WindowStyle="None"
         Title="MainWindow" Height="450" Width="800">
-    <Viewbox>
-        <Grid x:Name="canvasImage"/>
-    </Viewbox>
+    <DockPanel>
+        <Menu  DockPanel.Dock="Top" >
+            <MenuItem Header="Options">
+                <MenuItem Header="Reset" Click="Reset"/>
+                <MenuItem Header="Fill all squares" Click="FillRemainingSquares"/>
+                <MenuItem Header="Save as picture" Click="Screenshot"/>
+                <MenuItem Header="Close" Click="CloseAllWindows"/>
+            </MenuItem>
+        </Menu>
+        <Viewbox Stretch="Uniform" ClipToBounds="True">
+            <Grid x:Name="parentGrid">
+                <Grid RenderOptions.EdgeMode="Aliased" x:Name="canvasImage" Margin="0.4"/>
+            </Grid>
+        </Viewbox>
+    </DockPanel>
 </Window>

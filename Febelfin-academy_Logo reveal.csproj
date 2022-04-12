@@ -9,10 +9,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\FA_Circle.png" />
 	  <None Remove="Resources\FA_Logo.png" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Include="Resources\FA_Circle.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	  <Content Include="Resources\FA_Logo.png">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>

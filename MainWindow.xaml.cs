@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Forms;
 using System.IO;
@@ -19,7 +13,7 @@ namespace Febelfin_academy_Logo_reveal
 {
     public partial class MainWindow : Window
     {
-        public int AmountOf { get; set; } = 14;
+        public int AmountOf { get; set; } = 16;
         private List<Rectangle> _rects;
         public MainWindow()
         {
@@ -52,10 +46,22 @@ namespace Febelfin_academy_Logo_reveal
             canvasImage.Children.Add(image);
         }
 
+        public void AddBorder()
+        {
+            var image = new Image();
+            image.Source = new BitmapImage(new Uri(@"Resources\FA_Circle.png", UriKind.Relative));
+            image.Stretch = Stretch.Fill;
+
+            Grid.SetColumnSpan(image, AmountOf);
+            Grid.SetRowSpan(image, AmountOf);
+
+            parentGrid.Children.Add(image);
+        }
+
         public void FillSquare(Brush color)
         {
             Random random = new Random();
-            if (_rects.Count > 0) //Anders crashed die na de laatste klik
+            if (_rects.Count > 0)
             {
                 var square = _rects[random.Next(_rects.Count)];
                 square.Fill = color;
@@ -63,14 +69,15 @@ namespace Febelfin_academy_Logo_reveal
             }
             if (_rects.Count == 0)
             {
-                //maakt image 100% opacity als alle vakjes ingekleurd zijn
                 var img = canvasImage.Children.OfType<Image>().First();
                 img.Opacity = 1;
-                Screenshot();
             }
             State.Save(canvasImage.Children.OfType<Rectangle>().ToList());
         }
-
+        private void Screenshot(object sender, RoutedEventArgs e)
+        {
+            Screenshot();
+        }
         private void Screenshot()
         {
             string myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -78,16 +85,16 @@ namespace Febelfin_academy_Logo_reveal
             Directory.CreateDirectory(folderPath);
 
             int scale = 20;
-            RenderTargetBitmap bmp = new RenderTargetBitmap((int)canvasImage.ActualWidth*scale, (int)canvasImage.ActualHeight*scale, 96*scale, 96*scale, PixelFormats.Pbgra32);
+            RenderTargetBitmap bmp = new RenderTargetBitmap((int)canvasImage.ActualWidth * scale, (int)canvasImage.ActualHeight * scale, 96 * scale, 96 * scale, PixelFormats.Pbgra32);
             bmp.Render(canvasImage);
 
             PngBitmapEncoder encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(bmp));
 
-            FileStream fs = new FileStream(folderPath+"//Febelfin-Academy Logo.png", FileMode.Create);
+            FileStream fs = new FileStream(folderPath + "//Febelfin-Academy Logo.png", FileMode.Create);
             encoder.Save(fs);
             fs.Close();
-            System.Windows.MessageBox.Show("Screenshot saved at: "+folderPath, "Saved!", MessageBoxButton.OK, MessageBoxImage.Information);
+            System.Windows.MessageBox.Show("Screenshot saved at: " + folderPath, "Saved!", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public void RestoreSquares()
@@ -98,32 +105,70 @@ namespace Febelfin_academy_Logo_reveal
                 canvasImage.Children.Add(c);
             }
         }
+        private void Reset(object sender, RoutedEventArgs e)
+        {
+            canvasImage.Children.Clear();
+            CreateCanvas();
+            AddSquares();
+            AddLogo();
+            _rects = canvasImage.Children.OfType<Rectangle>().Where(x => x.Fill == null).ToList();
+        }
 
         public void AddSquares()
         {
+            int empty;
+
             for (int i = 0; i < AmountOf; i++)
             {
+                if (i == 0 || i == 15)
+                {
+                    empty = 4;
+                }
+                else if (i == 1 || i == 14)
+                {
+                    empty = 2;
+                }
+                else if (i <= 3 || i >= 12)
+                {
+                    empty = 1;
+                }
+                else
+                {
+                    empty = 0;
+                }
+
                 for (int j = 0; j < AmountOf; j++)
                 {
-                    Rectangle square = new Rectangle();
-
-                    Grid.SetColumn(square, j);
-                    Grid.SetRow(square, i);
-
-                    square.Width = 20;
-                    square.Height = 20;
-
-                    canvasImage.Children.Add(square);
+                    if (empty == 0 || j >= empty && j < (AmountOf - empty))
+                    {
+                        MakeSquare(i, j);
+                    }
                 }
             }
         }
 
-        public void RevealAll()
+        public void MakeSquare(int row, int column)
         {
-            for (int i = 0; i < _rects.Count; i++)
+            Rectangle square = new Rectangle();
+            Grid.SetColumn(square, column);
+            Grid.SetRow(square, row);
+            canvasImage.Children.Add(square);
+        }
+
+        private void FillRemainingSquares(object sender, RoutedEventArgs e)
+        {
+            var buttonColors = ButtonColors.Colors;
+            Random random = new Random();
+            var amountLeft = _rects.Count;
+
+            for (int i = 0; i < amountLeft; i++)
             {
-                FillSquare(Brushes.BlueViolet);
+                FillSquare(buttonColors[random.Next(buttonColors.Count)]);               
             }
+        }
+        private void CloseAllWindows(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
         }
 
         public void MaximizeToSecondaryMonitor()
@@ -163,16 +208,17 @@ namespace Febelfin_academy_Logo_reveal
             }
             else
             {
-                //Anders start het programma de eerste keer niet op
                 AddSquares();
             }
 
             AddLogo();
-            _rects = this.canvasImage.Children.OfType<Rectangle>().Where(x => x.Fill == null).ToList();
+            AddBorder();
+            _rects = canvasImage.Children.OfType<Rectangle>().Where(x => x.Fill == null).ToList();
 
             var buttonWindow = new ButtonWindow(this);
             buttonWindow.Show();
             MaximizeToSecondaryMonitor();
         }
+
     }
 }

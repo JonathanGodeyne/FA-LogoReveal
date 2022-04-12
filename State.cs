@@ -11,25 +11,15 @@ namespace Febelfin_academy_Logo_reveal
 {
     public static class State
     {
-
-       
-
-    
-
         public static void Save(List<Rectangle> rectangles)
         {
-
             using (StreamWriter sw = File.CreateText("Coordinates.csv"))
             {
                 foreach (Rectangle rect in rectangles)
                 {
                     sw.WriteLine($"{Grid.GetRow(rect)};{Grid.GetColumn(rect)};{rect.Fill}");
                 }
-                
             }
-
-
-
         }
 
         public static List<Rectangle> Load()
@@ -43,15 +33,10 @@ namespace Febelfin_academy_Logo_reveal
                 Rectangle rect = new Rectangle();
                 Grid.SetRow(rect, int.Parse(line[0]));
                 Grid.SetColumn(rect, int.Parse(line[1]));
-                rect.Fill = line[2] == String.Empty ? null : (SolidColorBrush)new BrushConverter().ConvertFrom(line[2]);
+                rect.Fill = line[2] == string.Empty ? null : (SolidColorBrush)new BrushConverter().ConvertFrom(line[2]);
                 rectangles.Add(rect);
-
             }
-
             return rectangles;
-
-
-
         }
 
         public static bool Exists()
