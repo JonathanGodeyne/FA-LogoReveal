@@ -6,16 +6,17 @@
         xmlns:local="clr-namespace:Febelfin_academy_Logo_reveal"
         mc:Ignorable="d"
         Loaded="Window_Loaded"  
-        WindowState="Normal"
+        
         WindowStyle="None"
         Title="MainWindow" Height="450" Width="800">
     <DockPanel>
         <Menu  DockPanel.Dock="Top" >
-            <MenuItem Header="Options">
+            <MenuItem Header="Opties">
                 <MenuItem Header="Reset" Click="Reset"/>
-                <MenuItem Header="Fill all squares" Click="FillRemainingSquares"/>
-                <MenuItem Header="Save as picture" Click="Screenshot"/>
-                <MenuItem Header="Close" Click="CloseAllWindows"/>
+                <MenuItem Header="Alle Vakjes Kleuren" Click="FillRemainingSquares"/>
+                <MenuItem Header="Afbeelding Opslaan" Click="Screenshot"/>
+                <MenuItem Header="Schermen Aanpassen" Click="OpenScreenSelector"/>
+                <MenuItem Header="Afsluiten" Click="CloseAllWindows"/>
             </MenuItem>
         </Menu>
         <Viewbox Stretch="Uniform" ClipToBounds="True">

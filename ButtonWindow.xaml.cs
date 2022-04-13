@@ -18,6 +18,7 @@ namespace Febelfin_academy_Logo_reveal
         public ButtonWindow(MainWindow main)
         {            
             InitializeComponent();
+            
             _main = main;
         }
         private void button_Click(object sender, RoutedEventArgs e)

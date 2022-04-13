@@ -171,27 +171,37 @@ namespace Febelfin_academy_Logo_reveal
             System.Windows.Application.Current.Shutdown();
         }
 
-        public void MaximizeToSecondaryMonitor()
+        private void OpenScreenSelector(object sender, RoutedEventArgs e)
         {
-            var secondaryScreen = Screen.AllScreens.Where(s => !s.Primary).FirstOrDefault();
-
-            if (secondaryScreen != null)
-            {
-                var workingArea = secondaryScreen.WorkingArea;
-                Left = workingArea.Left;
-                Top = workingArea.Top;
-                Width = workingArea.Width;
-                Height = workingArea.Height;
-
-                if (IsLoaded)
-                {
-                    WindowState = WindowState.Maximized;
-                }
-            }
+            new ScreenSelector().ShowDialog();
         }
+
+
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            this.Hide();
+            var screenSelector = new ScreenSelector();
+            var buttonWindow = new ButtonWindow(this);
+
+            Screenhelper.MainWindow = this;
+            Screenhelper.ControllerWindow = buttonWindow;
+
+            screenSelector.ShowDialog();
+
+
+  
+
+
+            buttonWindow.Show();
+            this.Show();
+
+
+
+           
+           
+            
+
             CreateCanvas();
 
             if (State.Exists())
@@ -215,10 +225,12 @@ namespace Febelfin_academy_Logo_reveal
             AddBorder();
             _rects = canvasImage.Children.OfType<Rectangle>().Where(x => x.Fill == null).ToList();
 
-            var buttonWindow = new ButtonWindow(this);
-            buttonWindow.Show();
-            MaximizeToSecondaryMonitor();
+
+            
+            
+            
         }
 
+       
     }
 }

@@ -6,10 +6,10 @@
 
         xmlns:local="clr-namespace:Febelfin_academy_Logo_reveal"
 
-        
+        WindowStyle="None"
         mc:Ignorable="d"        
-        WindowState="Maximized"
-        Title="ButtonWindow" Height="450" Width="800">
+        
+        Title="ButtonWindow" Height="450" Width="800" WindowStartupLocation="Manual">
     <UniformGrid x:Name="buttonGrid" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <Button x:Name="buttonBlue" Background="{x:Static local:ButtonColors.Blue}"  Click="button_Click"/>
         <Button x:Name="buttonRed" Background="{x:Static local:ButtonColors.Pink}" Click="button_Click"/>
