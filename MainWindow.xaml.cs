@@ -94,7 +94,7 @@ namespace Febelfin_academy_Logo_reveal
             FileStream fs = new FileStream(folderPath + "//Febelfin-Academy Logo.png", FileMode.Create);
             encoder.Save(fs);
             fs.Close();
-            System.Windows.MessageBox.Show("Screenshot saved at: " + folderPath, "Saved!", MessageBoxButton.OK, MessageBoxImage.Information);
+            System.Windows.MessageBox.Show("Afbeelding opgeslagen in: " + folderPath, "Opgeslaan!", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public void RestoreSquares()
