@@ -85,8 +85,8 @@ namespace Febelfin_academy_Logo_reveal
             Directory.CreateDirectory(folderPath);
 
             int scale = 20;
-            RenderTargetBitmap bmp = new RenderTargetBitmap((int)canvasImage.ActualWidth * scale, (int)canvasImage.ActualHeight * scale, 96 * scale, 96 * scale, PixelFormats.Pbgra32);
-            bmp.Render(canvasImage);
+            RenderTargetBitmap bmp = new RenderTargetBitmap((int)parentGrid.ActualWidth * scale, (int)parentGrid.ActualHeight * scale, 96 * scale, 96 * scale, PixelFormats.Pbgra32);
+            bmp.Render(parentGrid);
 
             PngBitmapEncoder encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(bmp));
@@ -188,9 +188,6 @@ namespace Febelfin_academy_Logo_reveal
             Screenhelper.ControllerWindow = buttonWindow;
 
             screenSelector.ShowDialog();
-
-
-  
 
 
             buttonWindow.Show();
